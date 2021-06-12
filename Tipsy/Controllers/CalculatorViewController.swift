@@ -13,7 +13,9 @@ class CalculatorViewController: UIViewController {
     var tip = 0.10
     var numberOfPeople = 2
     
-    var total = 0.0
+    var billTotal = 0.0
+    
+    var finalResult = "0.0"
     
     
     
@@ -66,17 +68,26 @@ class CalculatorViewController: UIViewController {
         if bill != "" {
             
             
-            total = Double(bill)!
+            billTotal = Double(bill)!
             
-            let result = total * (1 + tip) / Double(numberOfPeople)
+            let result = billTotal * (1 + tip) / Double(numberOfPeople)
             
-            let resultToDEcimal = String(format: "%.2f", result)
-            
-            print(resultToDEcimal)
+            finalResult = String(format: "%.2f", result)
+            print(finalResult)
         }
-        
+        self.performSegue(withIdentifier: "goToResult", sender: self)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResult" {
+            let destinationVC = segue.destination as! ResultsViewController
+            destinationVC.result = finalResult
+            destinationVC.tip = Int(tip * 100)
+            destinationVC.split = numberOfPeople
+        }
+        
+        
+    }
     
 }
 
